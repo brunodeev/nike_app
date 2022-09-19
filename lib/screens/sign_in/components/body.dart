@@ -4,6 +4,7 @@ import 'package:nike_app/constants.dart';
 import 'package:nike_app/size_config.dart';
 
 import '../../../components/custom_surfix_icon.dart';
+import '../../../components/form_error.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -48,7 +49,7 @@ class SignForm extends StatefulWidget {
 
 class _SignFormState extends State<SignForm> {
   final _formKey = GlobalKey<FormState>();
-  final List<String> errors = [];
+  final List<String> errors = ['Demo Error'];
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -58,9 +59,14 @@ class _SignFormState extends State<SignForm> {
         SizedBox(height: getProportionateScreenHeight(20)),
         buildPasswordFormField(),
         SizedBox(height: getProportionateScreenHeight(20)),
+        FormError(errors: errors),
         DefaultButton(
           text: 'Entrar',
-          press: () {},
+          press: () {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+            }
+          },
         ),
       ]),
     );
@@ -83,6 +89,32 @@ class _SignFormState extends State<SignForm> {
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
+      onChanged: (value) {
+        if (value.isNotEmpty && errors.contains(kEmailNullError)) {
+          setState(() {
+            errors.remove(kEmailNullError);
+          });
+        } else if (emailValidatorRegExp.hasMatch(value) &&
+            errors.contains(kInvalidEmailError)) {
+          setState(() {
+            errors.remove(kInvalidEmailError);
+          });
+        }
+        return;
+      },
+      validator: (value) {
+        if (value!.isEmpty && !errors.contains(kEmailNullError)) {
+          setState(() {
+            errors.add(kEmailNullError);
+          });
+        } else if (!emailValidatorRegExp.hasMatch(value) &&
+            !errors.contains(kInvalidEmailError)) {
+          setState(() {
+            errors.add(kInvalidEmailError);
+          });
+        }
+        return null;
+      },
       decoration: const InputDecoration(
           labelText: 'Email',
           hintText: 'Seu email',
