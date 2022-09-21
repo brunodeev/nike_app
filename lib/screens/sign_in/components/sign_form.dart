@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nike_app/screens/forgot_password/forgot_password_screen.dart';
+import 'package:nike_app/screens/login_success/login_success_screen.dart';
 
 import '../../../components/custom_surfix_icon.dart';
 import '../../../components/default_button.dart';
@@ -41,10 +43,14 @@ class _SignFormState extends State<SignForm> {
             ),
             const Text('Lembrar de mim'),
             const Spacer(),
-            const Text(
-              'Esqueci a senha',
-              style: TextStyle(
-                decoration: TextDecoration.underline,
+            GestureDetector(
+              onTap: () =>
+                  Navigator.pushNamed(context, ForgotPasswordScreen.routeName),
+              child: const Text(
+                'Esqueci a senha',
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
           ],
@@ -56,6 +62,7 @@ class _SignFormState extends State<SignForm> {
           press: () {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
+              Navigator.pushNamed(context, LoginSuccessScreen.routename);
             }
           },
         ),
@@ -84,10 +91,12 @@ class _SignFormState extends State<SignForm> {
           setState(() {
             errors.add(kPassNullError);
           });
+          return "";
         } else if (value.length < 8 && !errors.contains(kShortPassError)) {
           setState(() {
             errors.add(kShortPassError);
           });
+          return "";
         }
         return null;
       },
@@ -124,11 +133,13 @@ class _SignFormState extends State<SignForm> {
           setState(() {
             errors.add(kEmailNullError);
           });
+          return "";
         } else if (!emailValidatorRegExp.hasMatch(value) &&
             !errors.contains(kInvalidEmailError)) {
           setState(() {
             errors.add(kInvalidEmailError);
           });
+          return "";
         }
         return null;
       },

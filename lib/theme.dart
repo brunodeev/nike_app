@@ -38,6 +38,7 @@ AppBarTheme appBarTheme() {
   return const AppBarTheme(
     titleTextStyle: TextStyle(color: Color(0xFF8B8B8B), fontSize: 18),
     systemOverlayStyle: SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.dark,
       statusBarColor: Colors.white,
       statusBarBrightness: Brightness.light,
     ),
